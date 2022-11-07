@@ -442,19 +442,23 @@ class MPSSum:
         the complete wavefunction that is encoded in the MPS."""
         return sum(wa * A.to_vector() for wa, A in zip(self.weights, self.states))
 
-    def toMPS(self, normalize=None, tolerance=None):
+    def toMPS(self, normalize=None, tolerance=None, maxsweeps=None, max_bond_dimension=None):
         from ..truncate.combine import combine
 
         if normalize is None:
             normalize = self.normalize
         if tolerance is None:
             tolerance = self.tolerance
+        if maxsweeps is None:
+            maxsweeps = self.maxsweeps
+        if max_bond_dimension is None:
+            max_bond_dimension = self.max_bond_dimension
         ψ, _ = combine(
             self.weights,
             self.states,
-            maxsweeps=self.maxsweeps,
-            tolerance=self.tolerance,
+            maxsweeps=maxsweeps,
+            tolerance=tolerance,
             normalize=normalize,
-            max_bond_dimension=self.max_bond_dimension,
+            max_bond_dimension=max_bond_dimension,
         )
         return ψ
